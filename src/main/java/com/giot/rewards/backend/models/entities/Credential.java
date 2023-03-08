@@ -13,16 +13,14 @@ public class Credential implements Serializable {
     private String _id;
 
     private Integer identifier;
-    private String username;
     private String password;
 
     public Credential() {
 
     }
 
-    public Credential(Integer identifier, String username, String password) {
+    public Credential(Integer identifier, String password) {
         this.identifier = identifier;
-        this.username = username;
         this.password = password;
     }
 
@@ -37,12 +35,6 @@ public class Credential implements Serializable {
     }
     public void setIdentifier(Integer identifier) {
         this.identifier = identifier;
-    }
-    public String getUsername() {
-        return username;
-    }
-    public void setUsername(String username) {
-        this.username = username;
     }
     public String getPassword() {
         return password;
