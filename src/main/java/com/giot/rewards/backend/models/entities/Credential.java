@@ -2,34 +2,35 @@ package com.giot.rewards.backend.models.entities;
 
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 
-public class LoginCredential implements Serializable {
+@Document(collection = "credentials")
+public class Credential implements Serializable {
 
     @Id
-    private String id;
+    private String _id;
 
     private Integer identifier;
     private String username;
     private String password;
 
-    public LoginCredential() {
+    public Credential() {
 
     }
 
-    public LoginCredential(String id, Integer identifier, String username, String password) {
-        this.id = id;
+    public Credential(Integer identifier, String username, String password) {
         this.identifier = identifier;
         this.username = username;
         this.password = password;
     }
 
     public String getId() {
-        return id;
+        return _id;
     }
     public void setId(String id) {
-        this.id = id;
+        this._id = _id;
     }
     public Integer getIdentifier() {
         return identifier;

@@ -1,15 +1,17 @@
 package com.giot.rewards.backend.models.entities;
 
+
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
-
-public class Users implements Serializable {
+@Document(collection = "users")
+public class User implements Serializable {
 
     @Id
     private String _id;
 
-    private Integer identifier;
+    private Integer identifier; // Matricula o número de empleado
     private String firstname;
     private String lastname;
     private String type;
@@ -18,10 +20,10 @@ public class Users implements Serializable {
     private Integer points;
 
 
-    public Users() {
+    public User() {
     }
 
-    public Users(Integer identifier, String firstname, String lastname, String type, String email, String phone, Integer points) {
+    public User(Integer identifier, String firstname, String lastname, String type, String email, String phone, Integer points) {
         this.identifier = identifier;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -84,4 +86,5 @@ public class Users implements Serializable {
     public String toString() {
         return "Nombre: ".concat(firstname).concat(" Apellido: ").concat(lastname);
     }
+
 }
