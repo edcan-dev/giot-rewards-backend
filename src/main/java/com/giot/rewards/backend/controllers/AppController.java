@@ -4,11 +4,15 @@ import com.giot.rewards.backend.models.dao.CredentialRepository;
 import com.giot.rewards.backend.models.dao.UserRepository;
 import com.giot.rewards.backend.models.entities.Credential;
 import com.giot.rewards.backend.models.entities.User;
+import com.giot.rewards.backend.services.CredentialServices;
+import com.giot.rewards.backend.services.ICredentialServices;
+import com.giot.rewards.backend.services.IUserServices;
 import com.giot.rewards.backend.services.UserServices;
 import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.MultiValueMapAdapter;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Generated;
@@ -16,7 +20,9 @@ import javax.script.ScriptEngine;
 import java.io.LineNumberReader;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -28,8 +34,11 @@ public class AppController {
     @Autowired
     private UserRepository userRepository;
 
-    //@Autowired
-    //private UserServices userServices;
+    @Autowired
+    private IUserServices userServices;
+
+    @Autowired
+    private ICredentialServices credentialServices;
 
 
 
@@ -92,24 +101,12 @@ public class AppController {
     public List<Credential> listCredentials () {
         return credentialRepository.findAll();
     }
-    @GetMapping("/list/users")
+    @GetMapping(value = "/list/users", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<User> listUsers () {
-
-
-
-        for (User user : userRepository.findAll()) {
-            System.out.println(user.getPoints());
-            UserServices userService = new UserServices(user);
-            userService.addPoints(150.0);
-            user.setPoints(userService.getPoints());
-            System.out.println(user.getPoints());
-        }
-
-
         return userRepository.findAll();
     }
 
-    @GetMapping("/crear")
+    @GetMapping("/create")
     public void crear() {
         userRepository.insert(new User(201920732,"Edgar","Cano","","","",100));
     }
@@ -147,8 +144,17 @@ public class AppController {
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public String login(@RequestBody Credential data) {
 
-        System.out.println(data.toString());
+        Map<String, Boolean> result = new HashMap<>();
 
+        String JSONString = null;
+
+        Integer identifier = data.getIdentifier();
+        if(credentialServices.checkCredential(identifier)) {
+            //result.put("hasCredentials",true;
+            return "{\"hasCredential\":true}";
+        } else {
+            return "{\"hasCredential\":false}";
+        }
         /*
         String result = null;
 
@@ -170,6 +176,6 @@ public class AppController {
             result = "No existe el usuario";
         } */
 
-        return data.getIdentifier().toString();
+
     }
 }

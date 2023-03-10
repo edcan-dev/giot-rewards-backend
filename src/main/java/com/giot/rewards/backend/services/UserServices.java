@@ -6,23 +6,24 @@ import org.springframework.stereotype.Service;
 import com.giot.rewards.backend.models.entities.User;
 
 
-public class UserServices extends User{
+@Service
+public class UserServices implements IUserServices{
 
-    public UserServices(User user) {
+    /*public UserServices(User user) {
 
         this.setPoints(user.getPoints());
-    }
+    }*/
+    @Autowired
+    private UserRepository userRepository;
 
     public Integer addPoints(Double amount) {
 
-        Integer points = (int) Math.floor(amount * (.10));
-
+        /*Integer points = (int) Math.floor(amount * (.10));
         Integer currentPoints = this.getPoints();
-
         this.setPoints(currentPoints + points);
- 
-        return this.getPoints();
+        return this.getPoints();*/
+
+        return 0;
     }
 
-    
 }
