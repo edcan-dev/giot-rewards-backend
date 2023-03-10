@@ -4,12 +4,14 @@ import com.giot.rewards.backend.models.dao.CredentialRepository;
 import com.giot.rewards.backend.models.dao.UserRepository;
 import com.giot.rewards.backend.models.entities.Credential;
 import com.giot.rewards.backend.models.entities.User;
+import com.giot.rewards.backend.services.UserServices;
 import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Generated;
 import javax.script.ScriptEngine;
 import java.io.LineNumberReader;
 import java.sql.SQLOutput;
@@ -25,6 +27,11 @@ public class AppController {
     private CredentialRepository credentialRepository;
     @Autowired
     private UserRepository userRepository;
+
+    //@Autowired
+    //private UserServices userServices;
+
+
 
     //@Autowired
     //private UserRepository userRepository;
@@ -87,8 +94,26 @@ public class AppController {
     }
     @GetMapping("/list/users")
     public List<User> listUsers () {
+
+
+
+        for (User user : userRepository.findAll()) {
+            System.out.println(user.getPoints());
+            UserServices userService = new UserServices(user);
+            userService.addPoints(150.0);
+            user.setPoints(userService.getPoints());
+            System.out.println(user.getPoints());
+        }
+
+
         return userRepository.findAll();
     }
+
+    @GetMapping("/crear")
+    public void crear() {
+        userRepository.insert(new User(201920732,"Edgar","Cano","","","",100));
+    }
+
 
     /*
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
