@@ -4,22 +4,13 @@ import com.giot.rewards.backend.models.dao.CredentialRepository;
 import com.giot.rewards.backend.models.dao.UserRepository;
 import com.giot.rewards.backend.models.entities.Credential;
 import com.giot.rewards.backend.models.entities.User;
-import com.giot.rewards.backend.services.CredentialServices;
 import com.giot.rewards.backend.services.ICredentialServices;
 import com.giot.rewards.backend.services.IUserServices;
-import com.giot.rewards.backend.services.UserServices;
-import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.util.MultiValueMap;
-import org.springframework.util.MultiValueMapAdapter;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Generated;
-import javax.script.ScriptEngine;
-import java.io.LineNumberReader;
-import java.sql.SQLOutput;
-import java.util.ArrayList;
+import javax.websocket.ClientEndpoint;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,10 +24,8 @@ public class AppController {
     private CredentialRepository credentialRepository;
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private IUserServices userServices;
-
     @Autowired
     private ICredentialServices credentialServices;
 
@@ -99,6 +88,7 @@ public class AppController {
 
     @GetMapping("/list/credentials")
     public List<Credential> listCredentials () {
+        System.out.println();
         return credentialRepository.findAll();
     }
     @GetMapping(value = "/list/users", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -110,7 +100,6 @@ public class AppController {
     public void crear() {
         userRepository.insert(new User(201920732,"Edgar","Cano","","","",100));
     }
-
 
     /*
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
@@ -141,41 +130,29 @@ public class AppController {
 
         return "";
     }*/
-    @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public String login(@RequestBody Credential data) {
 
-        Map<String, Boolean> result = new HashMap<>();
+    @PostMapping(value="/login/identifier", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public String loginIdentifier(@RequestBody Credential body) {
 
-        String JSONString = null;
-
-        Integer identifier = data.getIdentifier();
+        Integer identifier = body.getIdentifier();
         if(credentialServices.checkCredential(identifier)) {
-            //result.put("hasCredentials",true;
             return "{\"hasCredential\":true}";
         } else {
             return "{\"hasCredential\":false}";
         }
-        /*
-        String result = null;
+    }
 
-        Integer parsedIdentifier  = Integer.parseInt(identifier);
+    @PostMapping(value = "/login/password", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public String loginPassword(@RequestBody Credential body) {
 
-        System.out.println(parsedIdentifier);
+        Integer identifier = body.getIdentifier();
+        if(credentialServices.checkPassword(identifier)) {
+            User user = userRepository.findByIdentifier(identifier);
+            String userFirstname = user.getFirstname();
 
-
-        if(credentialRepository.findByIdentifier(parsedIdentifier) != null) { // Busca si existen las credenciales segun la Matrícula
-            Credential matchedCrendential = credentialRepository.findByIdentifier(parsedIdentifier);
-
-            if ( matchedCrendential.getPassword().equals("")){ // Aqui se inyectan los services
-                result = "Usuario sin contraseña";
-            } else {
-                result = "Usuario con contraseña";
-            }
-
+            return "{\"hasPassword\":true, \"userFirstname\":\"".concat(userFirstname).concat("\"}");
         } else {
-            result = "No existe el usuario";
-        } */
-
-
+            return "{\"hasPassword\":false}";
+        }
     }
 }

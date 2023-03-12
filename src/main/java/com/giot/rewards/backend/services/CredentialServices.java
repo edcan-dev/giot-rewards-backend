@@ -16,20 +16,33 @@ public class CredentialServices implements ICredentialServices {
     @Override
     public boolean checkCredential(Integer identifier) {
 
-        boolean result = false;
+        boolean hasCredential = false;
 
         for (Credential credential: credentialRepository.findAll()) {
             if(credential.getIdentifier().equals(identifier)) {
-                result =  true;
+                hasCredential =  true;
                 break;
             }
         }
-        return result;
+        return hasCredential;
     }
 
     @Override
     public boolean checkPassword(Integer identifier) {
-        return false;
+
+        if(! this.checkCredential(identifier)) { // Verifica si existe o no la credencial
+            this.checkCredential(identifier);
+        }
+
+        boolean hasPassword = true;
+
+        // Verifica si existe o no contraseña para ese identificador
+
+        Credential credential = credentialRepository.findByIdentifier(identifier);
+
+        if(credential.getPassword().equals("") || credential.getPassword() == null) hasPassword = false;
+
+        return hasPassword;
     }
 }
 

@@ -16,7 +16,7 @@ public class UserServices implements IUserServices{
     @Autowired
     private UserRepository userRepository;
 
-    public Integer addPoints(Double amount) {
+    public Integer calculatePoints(Double amount) {
 
         /*Integer points = (int) Math.floor(amount * (.10));
         Integer currentPoints = this.getPoints();
