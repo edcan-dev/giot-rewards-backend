@@ -4,11 +4,15 @@ package com.giot.rewards.backend.services;
 import com.giot.rewards.backend.models.dao.CredentialRepository;
 import com.giot.rewards.backend.models.dao.UserRepository;
 import com.giot.rewards.backend.models.entities.Credential;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CredentialServices implements ICredentialServices {
+
+    Logger logger = LoggerFactory.getLogger(CredentialServices.class);
 
     @Autowired
     private CredentialRepository credentialRepository;
@@ -30,18 +34,18 @@ public class CredentialServices implements ICredentialServices {
     @Override
     public boolean checkPassword(Integer identifier) {
 
-        if(! this.checkCredential(identifier)) { // Verifica si existe o no la credencial
-            this.checkCredential(identifier);
-        }
-
         boolean hasPassword = true;
 
         // Verifica si existe o no contraseña para ese identificador
 
         Credential credential = credentialRepository.findByIdentifier(identifier);
 
-        if(credential.getPassword().equals("") || credential.getPassword() == null) hasPassword = false;
-
+        try {
+            if(credential.getPassword().equals("") || credential.getPassword() == null) hasPassword = false;
+        } catch(NullPointerException ex) {
+            logger.warn("Petición incorrecta...");
+            return false;
+        }
         return hasPassword;
     }
 }
