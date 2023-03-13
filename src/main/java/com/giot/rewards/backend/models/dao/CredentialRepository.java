@@ -7,9 +7,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CredentialRepository extends MongoRepository<Credential,String> {
     public default Credential findByIdentifier(Integer identifier) {
-        for (Credential crendential: findAll()) {
-            if(crendential.getIdentifier().equals(identifier)) {
-                return crendential;
+        for (Credential credential: findAll()) {
+            if(credential.getIdentifier().equals(identifier)) {
+                return credential;
             }
         }
         return null;
