@@ -141,6 +141,14 @@ public class AppController {
 
         return "";
     }*/
+
+    @PostMapping(value="/login/identifier")
+    public String loginIdentifier(@RequestBody Integer identifier) {
+
+        System.out.println(identifier);
+        return "\"{\"hasCredential\":true}";
+    }
+
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public String login(@RequestBody Credential data) {
 
