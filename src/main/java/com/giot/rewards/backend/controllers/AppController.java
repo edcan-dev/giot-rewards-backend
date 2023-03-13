@@ -42,7 +42,10 @@ public class AppController {
     @GetMapping("/create")
     public void crear() {
         //credentialRepository.insert(new Credential(201910642,""));
-        userRepository.insert(new User(201920732,"Edgar","Cano","","","",100));
+        userRepository.insert(new User(201920732,"Edgar","Cano","student","","",100));
+        userRepository.insert(new User(201920732,"Yesenia","Hernández","student","","",100));
+        userRepository.insert(new User(201920732,"Iván","Larios","student","","",100));
+
     }
 
 
