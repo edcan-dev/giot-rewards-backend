@@ -50,6 +50,24 @@ public class LoginController {
             return "{\"hasPassword\":false}";
         }
     }
+    @PostMapping(value = "/validation", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public String validatePassword(@RequestBody Credential body) {
 
-    // @PostMapping(value = "/validation",)
+        if(credentialServices.validateLogin(body.getIdentifier(),body.getPassword())) {
+
+            User user = userRepository.findByIdentifier(body.getIdentifier());
+            return "{\"validated\":true," +
+                    "\"user\":" +
+                        "{\"identifier\":".concat(user.getIdentifier().toString()) + "," +
+                        "\"firstname\":\"".concat(user.getFirstname()) + "\"," +
+                        "\"lastname\":\"".concat(user.getLastname()) + "\"," +
+                        "\"type\":\"".concat(user.getType()) + "\"," +
+                        "\"email\":\"".concat(user.getEmail()) + "\"," +
+                        "\"phone\":\"".concat(user.getPhone()) + "\"," +
+                        "\"points\":".concat(user.getPoints().toString()) + "}" +
+                    "}";
+        } else {
+            return "{\"validated\":false}";
+        }
+    }
 }

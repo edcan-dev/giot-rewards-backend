@@ -48,6 +48,33 @@ public class CredentialServices implements ICredentialServices {
         }
         return hasPassword;
     }
+
+    @Override
+    public boolean validateLogin(Integer identifier, String password) {
+
+        boolean validated = false;
+
+        Credential credential = credentialRepository.findByIdentifier(identifier);
+
+        if(password == null) {
+            return false;
+        }
+
+        if(checkPassword(identifier)) {
+            if(credential.getPassword().equals(password)) {
+                logger.warn("Login validado...");
+                validated = true;
+            } else {
+                logger.warn("Login inválido...");
+            }
+        } else {
+            credential.setPassword(password);
+            System.out.println(credential);
+            credentialRepository.save(credential); // Definimos el nuevo pass
+            validated = true;
+        }
+        return validated;
+    }
 }
 
 

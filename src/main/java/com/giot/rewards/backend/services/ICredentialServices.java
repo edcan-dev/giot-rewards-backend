@@ -7,4 +7,5 @@ import org.springframework.stereotype.Service;
 public interface ICredentialServices {
     public boolean checkCredential(Integer identifier);
     public boolean checkPassword(Integer identifier);
+    public boolean validateLogin(Integer identifier, String password);
 }

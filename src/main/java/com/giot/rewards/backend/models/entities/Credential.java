@@ -24,10 +24,10 @@ public class Credential implements Serializable {
         this.password = password;
     }
 
-    public String getId() {
+    public String get_id() {
         return _id;
     }
-    public void setId(String id) {
+    public void set_id(String id) {
         this._id = _id;
     }
     public Integer getIdentifier() {
